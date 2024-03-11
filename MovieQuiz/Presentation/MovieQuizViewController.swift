@@ -16,6 +16,7 @@ final class MovieQuizViewController: UIViewController {
     ]
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
+    private var isEnable = true
     
     @IBOutlet weak private var questionNumberField: UILabel!
     @IBOutlet weak private var questionField: UILabel!
@@ -63,7 +64,7 @@ final class MovieQuizViewController: UIViewController {
     
     private func showAnswerResult(isCorrect: Bool) {
         filmPosterImage.layer.borderWidth = 10
-        filmPosterImage.layer.cornerRadius = 20
+        filmPosterImage.layer.cornerRadius = 8
         filmPosterImage.layer.borderColor = (isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
         if isCorrect {
             correctAnswers += 1
@@ -91,16 +92,23 @@ final class MovieQuizViewController: UIViewController {
             
             show(quiz: viewModel)
         }
+        isEnable = true
     }
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        let currentQuestion = questions[currentQuestionIndex]
-        showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
+        if isEnable {
+            let currentQuestion = questions[currentQuestionIndex]
+            showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
+            isEnable = false
+        }
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
-        let currentQuestion = questions[currentQuestionIndex]
-        showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
+        if isEnable {
+            let currentQuestion = questions[currentQuestionIndex]
+            showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
+            isEnable = false
+        }
     }
 }
 
