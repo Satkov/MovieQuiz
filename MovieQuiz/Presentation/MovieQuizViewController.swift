@@ -63,8 +63,8 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        filmPosterImage.layer.borderWidth = 10
-        filmPosterImage.layer.cornerRadius = 8
+        filmPosterImage.layer.borderWidth = 8
+        filmPosterImage.layer.cornerRadius = 20
         filmPosterImage.layer.borderColor = (isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
         if isCorrect {
             correctAnswers += 1
