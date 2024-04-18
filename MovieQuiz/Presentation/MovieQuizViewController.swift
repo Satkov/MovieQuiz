@@ -4,6 +4,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    private var alertPresenter: AlertPresenterProtocol?
     
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
@@ -16,11 +17,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet weak private var noButton: UIButton!
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let questionFactory = QuestionFactory()
         questionFactory.setup(delegate: self)
         self.questionFactory = questionFactory
+        
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
         
         questionFactory.requestNextQuestion()
     }
@@ -46,23 +53,20 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
+        let completion = {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-            
-            questionFactory?.requestNextQuestion()
+            self.questionFactory?.requestNextQuestion()
         }
         
-        alert.addAction(action)
-
-        self.present(alert, animated: true, completion: nil)
+        let alertData = AlertModel(
+            title: result.title,
+            message: result.text,
+            buttonText: result.buttonText,
+            completion: completion
+        )
+        
+        alertPresenter?.showAlert(alertData: alertData)
     }
     
     private func convert(model:QuizQuestion) -> QuizStepViewModel {
