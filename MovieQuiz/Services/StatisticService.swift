@@ -14,7 +14,41 @@ class StatisticServiceImplementation: StatisticServiceProtocol {
     private let userDefaults = UserDefaults.standard
     
     private enum Keys: String {
-        case correct, total, bestGame, gamesCount
+        case correct, total, bestGame, gamesCount, totalQuestionCount, totalCorrectAnswersCount
+    }
+    
+    var totalQuestionCount: Int {
+        get {
+            guard let data = userDefaults.data(forKey: Keys.totalQuestionCount.rawValue),
+                  let total = try? JSONDecoder().decode(Int.self, from: data) else {
+                return 0
+            }
+            return total
+        }
+        set {
+            guard let data = try? JSONEncoder().encode(newValue) else {
+                print("Невозможно сохранить результат")
+                return
+            }
+            userDefaults.set(data, forKey: Keys.totalQuestionCount.rawValue)
+        }
+    }
+    
+    var totalCorrectAnswersCount: Int {
+        get {
+            guard let data = userDefaults.data(forKey: Keys.totalCorrectAnswersCount.rawValue),
+                  let total = try? JSONDecoder().decode(Int.self, from: data) else {
+                return 0
+            }
+            return total
+        }
+        set {
+            guard let data = try? JSONEncoder().encode(newValue) else {
+                print("Невозможно сохранить результат")
+                return
+            }
+            userDefaults.setValue(data, forKey: Keys.totalCorrectAnswersCount.rawValue)
+        }
     }
     
     var totalAccuracy: Double {
@@ -73,9 +107,10 @@ class StatisticServiceImplementation: StatisticServiceProtocol {
         if newGame.isBetterThan(bestGame) {
             bestGame = newGame
         }
-        let newGameAccuracy = (Double(count) / Double(amount))
-        totalAccuracy = (totalAccuracy * Double(gamesCount) + newGameAccuracy) / Double((gamesCount + 1))
+        totalQuestionCount += amount
+        totalCorrectAnswersCount += count
         gamesCount += 1
+        totalAccuracy = Double(totalCorrectAnswersCount) / Double(totalQuestionCount)
     }
     
     func getGamesStatistic(correct count: Int, total amount: Int) -> String {
