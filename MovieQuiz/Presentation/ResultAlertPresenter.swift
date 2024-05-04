@@ -1,6 +1,6 @@
 import UIKit
 
-final class AlertPresenter: AlertPresenterProtocol {
+final class ResultAlertPresenter: AlertPresenterProtocol {
     weak var delegate: UIViewController?
 
     func setup(delegate: UIViewController) {
@@ -12,14 +12,11 @@ final class AlertPresenter: AlertPresenterProtocol {
             title: alertData.title,
             message: alertData.message,
             preferredStyle: .alert
-)
-        
+        )
         let action = UIAlertAction(title: alertData.buttonText, style: .default) { _ in
             alertData.completion()
         }
-        
         alert.addAction(action)
-        
         return alert
     }
     
