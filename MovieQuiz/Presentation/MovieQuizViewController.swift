@@ -5,7 +5,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var resultAlertPresenter: AlertPresenterProtocol?
-    private var StatisticService: StatisticServiceProtocol!
+    private var statisticService: StatisticServiceProtocol!
 
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
@@ -30,7 +30,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         self.resultAlertPresenter = resultAlertPresenter
 
         questionFactory.requestNextQuestion()
-        StatisticService = StatisticServiceImplementation()
+        statisticService = StatisticServiceImplementation()
     }
 
     // MARK: - QuestionFactoryDelegate
@@ -54,7 +54,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     private func show(quiz result: QuizResultsViewModel) {
-        StatisticService.store(
+        statisticService.store(
             correct: self.correctAnswers,
             total: self.questionsAmount
         )
@@ -63,7 +63,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.correctAnswers = 0
             self.questionFactory?.requestNextQuestion()
         }
-        let message = StatisticService.getGamesStatistic(
+        let message = statisticService.getGamesStatistic(
             correct: self.correctAnswers,
             total: self.questionsAmount
         )
