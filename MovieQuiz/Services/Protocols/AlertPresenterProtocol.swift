@@ -1,6 +1,6 @@
 import UIKit
 
 protocol AlertPresenterProtocol {
-    func setup(delegate: UIViewController) -> Void
-    func showAlert(alertData: AlertModel) -> Void
+    func setup(delegate: UIViewController)
+    func showAlert(alertData: AlertModel)
 }

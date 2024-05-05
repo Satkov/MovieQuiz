@@ -14,14 +14,14 @@ struct MovieModel: Codable {
     let crew: String
     let imDbRating: Double
     let imDbRatingCount: Int
-    
+
     private enum ParseError: Error {
         case rankFailure
         case yearFailure
         case IMDbRatingFailure
         case IMDbRatingCountFailure
     }
-    
+
     private enum CodingKeys: CodingKey {
         case id
         case rank
@@ -33,10 +33,10 @@ struct MovieModel: Codable {
         case imDbRating
         case imDbRatingCount
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         let rank = try container.decode(String.self, forKey: .rank)
         guard let rankValue = Int(rank) else {
             throw ParseError.rankFailure
@@ -53,7 +53,7 @@ struct MovieModel: Codable {
         guard let imDbRatingCountValue = Int(imDbRatingCount) else {
             throw ParseError.IMDbRatingFailure
         }
-        
+
         self.id = try container.decode(String.self, forKey: .id)
         self.rank = rankValue
         self.title = try container.decode(String.self, forKey: .title)
@@ -68,17 +68,17 @@ struct MovieModel: Codable {
 
 func getMovies(from jsonString: String) -> [MovieModel]? {
 
-    var movies: [MovieModel]? = nil
+    var movies: [MovieModel]?
     do {
         guard let data = jsonString.data(using: .utf8) else {
             return nil
         }
-        
+
         let top = try JSONDecoder().decode(TopModel.self, from: data)
         movies = top.items
     } catch {
         print("Failed to parse: \(jsonString)")
     }
-    
+
     return movies
 }
