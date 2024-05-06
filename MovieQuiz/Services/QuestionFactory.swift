@@ -9,21 +9,21 @@ class QuestionFactory: QuestionFactoryProtocol {
         QuizQuestion(image: "The Ice Age Adventures of Buck Wild", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: false),
         QuizQuestion(image: "Old", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: false),
         QuizQuestion(image: "Tesla", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: false),
-        QuizQuestion(image: "Vivarium", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: false),
+        QuizQuestion(image: "Vivarium", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: false)
     ]
-    
+
     weak var delegate: QuestionFactoryDelegate?
-    
+
     func requestNextQuestion() {
         guard let index = (0..<questions.count).randomElement() else {
-                delegate?.didReceiveNextQuestion(question: nil)
-                return
-            }
+            delegate?.didReceiveNextQuestion(question: nil)
+            return
+        }
 
-            let question = questions[safe: index]
-            delegate?.didReceiveNextQuestion(question: question)
+        let question = questions[safe: index]
+        delegate?.didReceiveNextQuestion(question: question)
     }
-    
+
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
     }
