@@ -10,7 +10,7 @@ struct GameRecord: Codable {
     }
 }
 
-class StatisticServiceImplementation: StatisticServiceProtocol {
+class StatisticService: StatisticServiceProtocol {
     private let userDefaults = UserDefaults.standard
 
     private enum Keys: String {

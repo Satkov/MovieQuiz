@@ -1,6 +1,6 @@
 import UIKit
 
-final class ResultAlertPresenter: AlertPresenterProtocol {
+final class ErrorAlertPresenter: AlertPresenterProtocol {
     weak var delegate: UIViewController?
 
     func setup(delegate: UIViewController) {
@@ -26,3 +26,4 @@ final class ResultAlertPresenter: AlertPresenterProtocol {
         delegate?.present(alert, animated: true, completion: nil)
     }
 }
+
