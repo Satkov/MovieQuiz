@@ -10,13 +10,13 @@ class QuestionFactory: QuestionFactoryProtocol {
         self.delegate = delegate
     }
 
-    private func loadMovies(_ listOfFilms: ListsOfFilmsURL, dispatchGroup: DispatchGroup) {
-        moviesLoader.loadMovies(listOfFilms) { [weak self] result in
+    private func loadMovies(_ listOfFilmsURL: ListsOfFilmsURL, dispatchGroup: DispatchGroup) {
+        moviesLoader.loadMovies(listOfFilmsURL) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
             switch result {
-                case .success(let mostPopularMovies):
-                    self.movies.append(contentsOf: mostPopularMovies)
+                case .success(let movies):
+                    self.movies.append(contentsOf: movies)
                     dispatchGroup.leave()
                 case .failure(let error):
                     self.delegate?.didFailToLoadData(with: error)
@@ -48,17 +48,15 @@ class QuestionFactory: QuestionFactoryProtocol {
 
             if let rating = movie.rating,
                let imageURL = movie.imageURL {
-           do {
-                imageData = try Data(contentsOf: imageURL)
-            } catch {
-                print("Failed to load image")
-            }
-
+               do {
+                    imageData = try Data(contentsOf: imageURL)
+                } catch {
+                    print("Failed to load image")
+                }
                 let rating = Float(rating) ?? 0
                 let ratingForQuestion = Float.randomRatingNumber(rating: rating)
                 let text = "Рейтинг этого фильма больше чем \(String(format: "%.1f", ratingForQuestion))?"
                 let correctAnswer = rating > ratingForQuestion
-
                 let question = QuizQuestion(image: imageData,
                                             text: text,
                                             correctAnswer: correctAnswer)
@@ -66,7 +64,9 @@ class QuestionFactory: QuestionFactoryProtocol {
                     guard let self = self else { return }
                     self.delegate?.didReceiveNextQuestion(question: question)
                 }
-            } else { requestNextQuestion() }
+            } else {
+                requestNextQuestion()
+            }
         }
     }
 }

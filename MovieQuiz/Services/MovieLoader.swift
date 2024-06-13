@@ -10,9 +10,9 @@ struct MoviesLoader: MoviesLoadingProtocol {
     private let networkClient = NetworkClient()
 
     // MARK: - URL
-    private func getURL(_ listsOfFilms: ListsOfFilmsURL) -> URL {
-        guard let url = URL(string: listsOfFilms.rawValue) else {
-            preconditionFailure("Unable to construct \(listsOfFilms.rawValue)")
+    private func getURL(_ listsOfFilmsURL: ListsOfFilmsURL) -> URL {
+        guard let url = URL(string: listsOfFilmsURL.rawValue) else {
+            preconditionFailure("Unable to construct \(listsOfFilmsURL.rawValue)")
         }
         return url
     }
