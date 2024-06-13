@@ -51,7 +51,9 @@ class QuestionFactory: QuestionFactoryProtocol {
                do {
                     imageData = try Data(contentsOf: imageURL)
                 } catch {
-                    print("Failed to load image")
+                    DispatchQueue.main.async {
+                        self.delegate?.didFailToLoadData(with: LoadError.failedLoadImage )
+                    }
                 }
                 let rating = Float(rating) ?? 0
                 let ratingForQuestion = Float.randomRatingNumber(rating: rating)

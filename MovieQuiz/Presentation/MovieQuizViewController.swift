@@ -27,6 +27,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         let resultAlertPresenter = AlertPresenter()
         resultAlertPresenter.setup(delegate: self)
         self.alertPresenter = resultAlertPresenter
+        filmPosterImage.contentMode = .scaleToFill
 
         showLoadingIndicator()
         questionFactory?.loadData()
@@ -35,7 +36,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     // MARK: - QuestionFactoryDelegate
 
     func didLoadDataFromServer() {
-        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
 
@@ -44,6 +44,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     }
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        hideLoadingIndicator()
         guard let question = question else {
             return
         }
@@ -66,7 +67,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     }
 
     private func showNetworkError(message: String) {
-        hideLoadingIndicator() // скрываем индикатор загрузки
+        hideLoadingIndicator()
 
         let alertData = AlertModel(
                         title: "Ошибка!",
@@ -76,7 +77,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
 
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-
+            self.questionFactory?.loadData()
             self.questionFactory?.requestNextQuestion()
         }
         alertPresenter?.showAlert(alertData: alertData)
@@ -149,6 +150,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         } else {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
+            self.showLoadingIndicator()
         }
     }
 

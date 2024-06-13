@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		911437CB2C1B60D000F5D088 /* LoadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911437CA2C1B60D000F5D088 /* LoadError.swift */; };
 		9128D8F62B9DC77A00CDA6D6 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9128D8F42B9DC6E200CDA6D6 /* YS Display-Bold.ttf */; };
 		9128D8F82B9DCDE900CDA6D6 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5EE5DD284D7887003966EF /* UIColor+Extensions.swift */; };
 		9128D8F92B9F1A9300CDA6D6 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9128D8F52B9DC6E200CDA6D6 /* YS Display-Medium.ttf */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		911437CA2C1B60D000F5D088 /* LoadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadError.swift; sourceTree = "<group>"; };
 		9128D8F42B9DC6E200CDA6D6 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		9128D8F52B9DC6E200CDA6D6 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		9144DDAB2BDE854B004412EC /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		911437C92C1B60BF00F5D088 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				911437CA2C1B60D000F5D088 /* LoadError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
 		9128D8F22B9DC6CB00CDA6D6 /*  Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +163,7 @@
 		91DF8C9D2BD01C4B00A299E7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				911437C92C1B60BF00F5D088 /* Errors */,
 				91D2F2FB2BE6749500F9FBF8 /* Delegates */,
 				91D2F2FA2BE6748800F9FBF8 /* Protocols */,
 				91DF8C9E2BD01C6400A299E7 /* QuestionFactory.swift */,
@@ -282,6 +293,7 @@
 				91DF8CAD2BD1395700A299E7 /* AlertModel.swift in Sources */,
 				91DF8CA82BD04BC200A299E7 /* QuestionFactoryProtocol.swift in Sources */,
 				91DF8CB12BD155DA00A299E7 /* AlertPresenterProtocol.swift in Sources */,
+				911437CB2C1B60D000F5D088 /* LoadError.swift in Sources */,
 				9128D8F82B9DCDE900CDA6D6 /* UIColor+Extensions.swift in Sources */,
 				914E66052C187211008BFBEF /* Float+Extensions.swift in Sources */,
 				9144DDAC2BDE854B004412EC /* MovieModel.swift in Sources */,

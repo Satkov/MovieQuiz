@@ -14,13 +14,14 @@ public extension Float {
     /// - Parameter n:  Interval max
     /// - Returns:      Returns a random float point number between 0 and n max
     static func randomRatingNumber(rating: Float) -> Float {
-        var randomRatingNumber = Float.random * ((rating + 1) - (rating - 1)) + rating - 1
-        if randomRatingNumber >= 10 {
-            randomRatingNumber = 9.9
+        let randomRatingNumber = Float.random * ((rating + 1) - (rating - 1)) + rating - 1
+        switch randomRatingNumber {
+        case _ where randomRatingNumber >= 10:
+            return 9.9
+        case rating:
+            return randomRatingNumber - 0.1
+        default:
+            return randomRatingNumber
         }
-        if randomRatingNumber == rating {
-            randomRatingNumber -= 0.1
-        }
-        return randomRatingNumber
     }
 }
