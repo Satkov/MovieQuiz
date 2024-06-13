@@ -9,7 +9,7 @@ struct Movie: Codable {
     let title: String
     let rating: String?
     let imageURL: URL?
-    
+
     enum CodingKeys: String, CodingKey {
         case title
         case rating = "imDbRating"

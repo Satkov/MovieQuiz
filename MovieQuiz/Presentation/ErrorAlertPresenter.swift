@@ -26,4 +26,3 @@ final class ErrorAlertPresenter: AlertPresenterProtocol {
         delegate?.present(alert, animated: true, completion: nil)
     }
 }
-

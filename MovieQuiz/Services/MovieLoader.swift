@@ -8,7 +8,7 @@ enum ListsOfFilmsURL: String {
 struct MoviesLoader: MoviesLoadingProtocol {
     // MARK: - NetworkClient
     private let networkClient = NetworkClient()
-    
+
     // MARK: - URL
     private func getURL(_ listsOfFilms: ListsOfFilmsURL) -> URL {
         guard let url = URL(string: listsOfFilms.rawValue) else {

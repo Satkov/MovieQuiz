@@ -16,8 +16,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     @IBOutlet weak private var yesButton: UIButton!
     @IBOutlet weak private var noButton: UIButton!
     @IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
-    
-    
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -28,13 +27,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         let resultAlertPresenter = AlertPresenter()
         resultAlertPresenter.setup(delegate: self)
         self.alertPresenter = resultAlertPresenter
-        
+
         showLoadingIndicator()
         questionFactory?.loadData()
     }
 
     // MARK: - QuestionFactoryDelegate
-    
+
     func didLoadDataFromServer() {
         hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
@@ -43,7 +42,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
-    
+
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
@@ -55,29 +54,29 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
             self?.show(quiz: viewModel)
         }
     }
-    
+
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
-    
+
     private func hideLoadingIndicator() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
-    
+
     private func showNetworkError(message: String) {
         hideLoadingIndicator() // скрываем индикатор загрузки
-        
+
         let alertData = AlertModel(
                         title: "Ошибка!",
                         message: message,
                         buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
-            
+
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-            
+
             self.questionFactory?.requestNextQuestion()
         }
         alertPresenter?.showAlert(alertData: alertData)

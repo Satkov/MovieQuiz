@@ -5,7 +5,6 @@ import CoreGraphics
 
 public extension Float {
 
-    /// Returns a random floating point number between 0.0 and 1.0, inclusive.
     static var random: Float {
         return Float(arc4random()) / Float(UInt32.max)
     }
@@ -19,7 +18,7 @@ public extension Float {
         if randomRatingNumber >= 10 {
             randomRatingNumber = 9.9
         }
-        if randomRatingNumber == rating{
+        if randomRatingNumber == rating {
             randomRatingNumber -= 0.1
         }
         return randomRatingNumber
