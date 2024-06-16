@@ -18,6 +18,7 @@ final class AlertPresenter: AlertPresenterProtocol {
         }
 
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = "Result Alert"
         return alert
     }
 
