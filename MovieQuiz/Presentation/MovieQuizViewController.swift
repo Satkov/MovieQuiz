@@ -99,6 +99,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             self.questionFactory?.requestNextQuestion()
+            self.showLoadingIndicator()
         }
         let message = statisticService.getGamesStatistic(
             correct: self.correctAnswers,
