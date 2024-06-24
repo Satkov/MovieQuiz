@@ -9,10 +9,10 @@ public extension Float {
         return Float(arc4random()) / Float(UInt32.max)
     }
 
-    /// Random float between 0 and n-1.
+    /// Random float between n + 1  and n-1.
     ///
-    /// - Parameter n:  Interval max
-    /// - Returns:      Returns a random float point number between 0 and n max
+    /// - Parameter rating:  Interval mid
+    /// - Returns:      Returns a random float point number between n - 1 and n + 1
     static func randomRatingNumber(rating: Float) -> Float {
         let randomRatingNumber = Float.random * ((rating + 1) - (rating - 1)) + rating - 1
         switch randomRatingNumber {

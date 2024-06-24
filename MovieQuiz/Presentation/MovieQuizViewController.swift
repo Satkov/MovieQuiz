@@ -8,7 +8,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     private var statisticService: StatisticServiceProtocol!
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
-    private var isEnable = true
+    private var isButtonsEnable = true
 
     @IBOutlet weak private var questionNumberField: UILabel!
     @IBOutlet weak private var questionField: UILabel!
@@ -84,17 +84,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     }
 
     private func show(quiz step: QuizStepViewModel) {
-        isEnable = true
         filmPosterImage.image = step.image
         questionNumberField.text = step.questionNumber
         questionField.text = step.question
+        isButtonsEnable = true
     }
 
     private func show(quiz result: QuizResultsViewModel) {
         statisticService.store(
             correct: self.correctAnswers,
             total: self.questionsAmount
-        )
+        )2
         let completion = {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
@@ -121,7 +121,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
         )
     }
-
+    
+    
     private func showAnswerResult(isCorrect: Bool) {
         filmPosterImage.layer.borderWidth = 8
         filmPosterImage.layer.cornerRadius = 20
@@ -131,7 +132,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-
             self.showNextQuestionOrResults()
             self.filmPosterImage.layer.borderColor = UIColor.clear.cgColor
         }
@@ -156,18 +156,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     }
 
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        if isEnable {
+        if isButtonsEnable {
             guard let currentQuestion = currentQuestion else { return }
             showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
-            isEnable = false
+            isButtonsEnable = false
         }
     }
 
     @IBAction private func noButtonClicked(_ sender: Any) {
-        if isEnable {
+        if isButtonsEnable {
             guard let currentQuestion = currentQuestion else { return }
             showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
-            isEnable = false
+            isButtonsEnable = false
         }
     }
 }
