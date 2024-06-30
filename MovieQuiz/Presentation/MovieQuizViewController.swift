@@ -1,14 +1,13 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegateProtocol {
-    private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticServiceProtocol!
     private var correctAnswers: Int = 0
-    private var currentQuestionIndex: Int = 0
-    private var isButtonsEnable = true
+    var isButtonsEnable = true
+    private let presenter = MovieQuizPresenter()
 
     @IBOutlet weak private var questionNumberField: UILabel!
     @IBOutlet weak private var questionField: UILabel!
@@ -28,9 +27,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         resultAlertPresenter.setup(delegate: self)
         self.alertPresenter = resultAlertPresenter
         filmPosterImage.contentMode = .scaleToFill
-
         showLoadingIndicator()
         questionFactory?.loadData()
+        presenter.viewController = self
     }
 
     // MARK: - QuestionFactoryDelegate
@@ -42,26 +41,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
-
+    
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        hideLoadingIndicator()
-        guard let question = question else {
-            return
-        }
-
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
+        presenter.didReceiveNextQuestion(question: question)
     }
 
-    private func showLoadingIndicator() {
+    func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
 
-    private func hideLoadingIndicator() {
+    func hideLoadingIndicator() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
@@ -75,7 +65,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
                         buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
 
-            self.currentQuestionIndex = 0
+            presenter.resetQuestionIndex()
             self.correctAnswers = 0
             self.questionFactory?.loadData()
             self.questionFactory?.requestNextQuestion()
@@ -83,27 +73,27 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         alertPresenter?.showAlert(alertData: alertData)
     }
 
-    private func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) {
         filmPosterImage.image = step.image
         questionNumberField.text = step.questionNumber
         questionField.text = step.question
         isButtonsEnable = true
     }
 
-    private func show(quiz result: QuizResultsViewModel) {
+    func show(quiz result: QuizResultsViewModel) {
         statisticService.store(
             correct: self.correctAnswers,
-            total: self.questionsAmount
-        )2
+            total: 10
+        )
         let completion = {
-            self.currentQuestionIndex = 0
+            self.presenter.resetQuestionIndex()
             self.correctAnswers = 0
             self.questionFactory?.requestNextQuestion()
             self.showLoadingIndicator()
         }
         let message = statisticService.getGamesStatistic(
             correct: self.correctAnswers,
-            total: self.questionsAmount
+            total: 10
         )
         let alertData = AlertModel(
             title: result.title,
@@ -113,17 +103,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         )
         alertPresenter?.showAlert(alertData: alertData)
     }
-
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-        )
-    }
     
-    
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         filmPosterImage.layer.borderWidth = 8
         filmPosterImage.layer.cornerRadius = 20
         filmPosterImage.layer.borderColor = (isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
@@ -138,8 +119,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
     }
 
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ?
+        let currentQuestionIndex = presenter.getCurrentQuestionIndex()
+        if currentQuestionIndex == 9 {
+            let text = correctAnswers == 10 ?
                     "Поздравляем, вы ответили на 10 из 10!" :
                     "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
             let viewModel = QuizResultsViewModel(
@@ -149,25 +131,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
             )
             show(quiz: viewModel)
         } else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
             self.showLoadingIndicator()
         }
     }
 
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        if isButtonsEnable {
-            guard let currentQuestion = currentQuestion else { return }
-            showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
-            isButtonsEnable = false
-        }
+        presenter.yesButtonClicked()
     }
 
     @IBAction private func noButtonClicked(_ sender: Any) {
-        if isButtonsEnable {
-            guard let currentQuestion = currentQuestion else { return }
-            showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
-            isButtonsEnable = false
-        }
+        presenter.noButtonClicked()
     }
 }
