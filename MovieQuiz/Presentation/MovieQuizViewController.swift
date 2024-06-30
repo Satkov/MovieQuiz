@@ -1,7 +1,6 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegateProtocol {
-    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticServiceProtocol!
@@ -20,7 +19,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         statisticService = StatisticService()
 
         let resultAlertPresenter = AlertPresenter()
@@ -28,14 +26,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         self.alertPresenter = resultAlertPresenter
         filmPosterImage.contentMode = .scaleToFill
         showLoadingIndicator()
-        questionFactory?.loadData()
         presenter.viewController = self
+        presenter.questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        presenter.questionFactory?.loadData()
     }
 
     // MARK: - QuestionFactoryDelegate
 
     func didLoadDataFromServer() {
-        questionFactory?.requestNextQuestion()
+        presenter.questionFactory?.requestNextQuestion()
     }
 
     func didFailToLoadData(with error: Error) {
@@ -67,8 +66,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
 
             presenter.resetQuestionIndex()
             self.correctAnswers = 0
-            self.questionFactory?.loadData()
-            self.questionFactory?.requestNextQuestion()
+            presenter.questionFactory?.loadData()
+            presenter.questionFactory?.requestNextQuestion()
         }
         alertPresenter?.showAlert(alertData: alertData)
     }
@@ -88,7 +87,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
         let completion = {
             self.presenter.resetQuestionIndex()
             self.correctAnswers = 0
-            self.questionFactory?.requestNextQuestion()
+            self.presenter.questionFactory?.requestNextQuestion()
             self.showLoadingIndicator()
         }
         let message = statisticService.getGamesStatistic(
@@ -132,7 +131,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegatePr
             show(quiz: viewModel)
         } else {
             presenter.switchToNextQuestion()
-            self.questionFactory?.requestNextQuestion()
+            presenter.questionFactory?.requestNextQuestion()
             self.showLoadingIndicator()
         }
     }
