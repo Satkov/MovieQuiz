@@ -77,10 +77,10 @@ final class MovieQuizUITests: XCTestCase {
             app.buttons["Yes"].tap()
             sleep(2)
         }
-        
+
         sleep(2)
         let alert = app.alerts["Result Alert"]
-        
+
         XCTAssertTrue(alert.exists)
         alert.buttons.firstMatch.tap()
         XCTAssertFalse(alert.exists)
