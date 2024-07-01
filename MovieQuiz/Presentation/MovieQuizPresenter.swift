@@ -6,12 +6,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegateProtocol {
     private var currentQuestion: QuizQuestion?
     private var statisticService: StatisticServiceProtocol!
     
-    weak var viewController: MovieQuizViewController?
-
+    weak var viewController: MovieQuizViewControllerProtocol?
+    
+    var isButtonsEnable = true
     var correctAnswers: Int = 0
     var questionFactory: QuestionFactoryProtocol?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
             self.viewController = viewController
             viewController.showLoadingIndicator()
         
@@ -44,7 +45,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegateProtocol {
     
     func answerButtonClicked(answerIsYes: Bool) {
         guard let viewController else { return }
-        if viewController.isButtonsEnable {
+        if isButtonsEnable {
             didAnswer(isYes: answerIsYes)
         }
     }
@@ -52,13 +53,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegateProtocol {
     func didAnswer(isYes: Bool) {
         guard let currentQuestion = currentQuestion else { return }
         proceedWithAnswer(isCorrect: isYes == currentQuestion.correctAnswer)
-        viewController?.isButtonsEnable = false
+        isButtonsEnable = false
     }
     
     func proceedWithAnswer(isCorrect: Bool) {
         countCorrectAnswers(isCorrect: isCorrect)
         
-        viewController?.highlightImageBorder(isCorrect: isCorrect)
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
@@ -89,6 +90,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegateProtocol {
             questionFactory?.requestNextQuestion()
             viewController?.showLoadingIndicator()
         }
+        
+        isButtonsEnable = true
     }
     
     func getCurrentQuestionIndex() -> Int {

@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     @IBOutlet weak private var questionNumberField: UILabel!
     @IBOutlet weak private var questionField: UILabel!
     @IBOutlet weak private var filmPosterImage: UIImageView!
@@ -11,7 +11,6 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
     private var presenter: MovieQuizPresenter!
-    var isButtonsEnable = true
 
     // MARK: - Lifecycle
 
@@ -61,10 +60,10 @@ final class MovieQuizViewController: UIViewController {
         unHighlightImageBoarder()
     }
     
-    func highlightImageBorder(isCorrect: Bool) {
+    func highlightImageBorder(isCorrectAnswer: Bool) {
         filmPosterImage.layer.borderWidth = 8
         filmPosterImage.layer.cornerRadius = 20
-        filmPosterImage.layer.borderColor = (isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
+        filmPosterImage.layer.borderColor = (isCorrectAnswer ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
     }
     
     func unHighlightImageBoarder() {
@@ -91,7 +90,6 @@ final class MovieQuizViewController: UIViewController {
         filmPosterImage.image = step.image
         questionNumberField.text = step.questionNumber
         questionField.text = step.question
-        isButtonsEnable = true
     }
 
     func show(quiz result: QuizResultsViewModel) {
