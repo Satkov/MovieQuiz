@@ -77,12 +77,4 @@ class StatisticService: StatisticServiceProtocol {
         totalAccuracy = (totalAccuracy * Double(gamesCount) + newGameAccuracy) / (Double(gamesCount) + 1)
         gamesCount += 1
     }
-
-    func getGamesStatistic(correct count: Int, total amount: Int) -> String {
-        let score = "Ваш результат: \(count)/\(amount)"
-        let gameCount = "Количество сыграных квизов: \(gamesCount)"
-        let record = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))"
-        let averageAccuracy = "Средняя точность: \(String(format: "%.2f", totalAccuracy * 100))%"
-        return  [score, gameCount, record, averageAccuracy].joined(separator: "\n")
-    }
 }

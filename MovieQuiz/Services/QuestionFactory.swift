@@ -14,12 +14,12 @@ class QuestionFactory: QuestionFactoryProtocol {
         moviesLoader.loadMovies(listOfFilmsURL) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-            switch result {
+                switch result {
                 case .success(let movies):
                     self.movies.append(contentsOf: movies)
                     dispatchGroup.leave()
                 case .failure(let error):
-                    self.delegate?.didFailToLoadData(with: error)
+                        self.delegate?.didFailToLoadData(with: error)
                 }
             }
         }

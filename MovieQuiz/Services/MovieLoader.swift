@@ -8,7 +8,7 @@ enum ListsOfFilmsURL: String {
 struct MoviesLoader: MoviesLoadingProtocol {
     // MARK: - NetworkClient
     private let networkClient: NetworkRoutingProtocol
-    
+
     init(networkClient: NetworkRoutingProtocol = NetworkClient()) {
         self.networkClient = networkClient
     }
