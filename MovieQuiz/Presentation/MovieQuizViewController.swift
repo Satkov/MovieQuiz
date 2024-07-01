@@ -7,7 +7,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet weak private var yesButton: UIButton!
     @IBOutlet weak private var noButton: UIButton!
     @IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
-    
+
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
     private var presenter: MovieQuizPresenter!
@@ -19,14 +19,14 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         let resultAlertPresenter = AlertPresenter()
         self.alertPresenter = resultAlertPresenter
         resultAlertPresenter.setup(delegate: self)
-        
+
         presenter = MovieQuizPresenter(viewController: self)
-        
+
         filmPosterImage.contentMode = .scaleToFill
     }
-    
+
     // MARK: - Actions
-    
+
     @IBAction private func yesButtonClicked(_ sender: Any) {
         presenter.answerButtonClicked(answerIsYes: true)
     }
@@ -34,7 +34,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBAction private func noButtonClicked(_ sender: Any) {
         presenter.answerButtonClicked(answerIsYes: false)
     }
-    
+
     // MARK: - Private functions
 
     func didLoadDataFromServer() {
@@ -59,13 +59,13 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         activityIndicator.stopAnimating()
         unHighlightImageBoarder()
     }
-    
+
     func highlightImageBorder(isCorrectAnswer: Bool) {
         filmPosterImage.layer.borderWidth = 8
         filmPosterImage.layer.cornerRadius = 20
         filmPosterImage.layer.borderColor = (isCorrectAnswer ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor)
     }
-    
+
     func unHighlightImageBoarder() {
         filmPosterImage.layer.borderColor = UIColor.clear.cgColor
     }
@@ -98,16 +98,16 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             self.presenter.questionFactory?.requestNextQuestion()
             self.showLoadingIndicator()
         }
-        
+
         let message = presenter.makeResultMessage()
-        
+
         let alertData = AlertModel(
             title: result.title,
             message: message,
             buttonText: result.buttonText,
             completion: completion
         )
-        
+
         alertPresenter?.showAlert(alertData: alertData)
     }
 }

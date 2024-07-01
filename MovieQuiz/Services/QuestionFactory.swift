@@ -15,10 +15,10 @@ class QuestionFactory: QuestionFactoryProtocol {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {
-                    case .success(let movies):
-                        self.movies.append(contentsOf: movies)
-                        dispatchGroup.leave()
-                    case .failure(let error):
+                case .success(let movies):
+                    self.movies.append(contentsOf: movies)
+                    dispatchGroup.leave()
+                case .failure(let error):
                         self.delegate?.didFailToLoadData(with: error)
                 }
             }
