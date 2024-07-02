@@ -3,13 +3,13 @@ import UIKit
 @testable import MovieQuiz
 
 struct StubNetworkClient: NetworkRoutingProtocol {
-    
+
     enum TestError: Error {
     case test
     }
-    
+
     let emulateError: Bool
-    
+
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
         if emulateError {
             handler(.failure(TestError.test))
@@ -17,7 +17,7 @@ struct StubNetworkClient: NetworkRoutingProtocol {
             handler(.success(expectedResponse))
         }
     }
-    
+
     private var expectedResponse: Data {
         """
         {
