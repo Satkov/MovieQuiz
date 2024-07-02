@@ -1,4 +1,5 @@
-import UIKit
+import Foundation
+import PhotosUI
 
 final class MovieQuizPresenter: QuestionFactoryDelegateProtocol {
     private let questionsAmount: Int = 10
